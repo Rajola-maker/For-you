@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Special</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{--pink:#ff4d6d;}
+*{box-sizing:border-box}
+
+body,html{
+  margin:0;height:100%;
+  font-family:Poppins,sans-serif;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+
+.background{
+  position:fixed;inset:0;
+  background-size:cover;
+  background-position:center;
+  transition:1.5s ease-in-out;
+  z-index:-1;
+}
+
+/* 🌟 Background ya page ikoje kama picha, si nyeupe */
+.glass{
+  display:none;
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(15px);
+  border-radius:25px;
+  padding:35px;
+  width:90%;max-width:450px;
+  color:black; /* Maneno yawe black */
+  text-align:center;
+  animation:pop .6s ease;
+}
+.glass.active{display:block}
+
+h1{font-family:Dancing Script,cursive;font-size:2.7rem}
+p{color:black;} /* maneno ya black */
+
+button{
+  background:var(--pink);
+  border:none;
+  padding:12px 30px;
+  border-radius:50px;
+  color:black;
+  font-size:1.1rem;
+  cursor:pointer;
+  margin:10px;
+  box-shadow:0 0 20px rgba(255,77,109,.6);
+}
+
+button:hover{transform:scale(1.1)}
+
+input,textarea{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  margin-bottom:10px;
+  background:rgba(255,255,255,.2);
+  color:black; /* black text */
+}
+
+.gifts{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.gift{
+  background:rgba(255,255,255,.2);
+  padding:20px;
+  border-radius:15px;
+  font-size:1.8rem;
+  cursor:pointer;
+  transition:.3s;
+}
+.gift:hover{
+  transform:scale(1.2);
+  box-shadow:0 0 20px var(--pink);
+}
+
+.heart{
+  position:absolute;
+  animation:float 4s linear infinite;
+}
+
+@keyframes pop{
+  from{opacity:0;transform:scale(.7)}
+  to{opacity:1;transform:scale(1)}
+}
+@keyframes float{
+  from{transform:translateY(100vh);opacity:1}
+  to{transform:translateY(-10vh);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<!-- 🎵 MUSIC AUTOPLAY -->
+<audio id="music" autoplay loop muted>
+  <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Scott_Holmes_Music/Happy_Music/Scott_Holmes_Music_-_05_-_Upbeat_Party.mp3" type="audio/mpeg">
+</audio>
+
+<!-- PAGE 1 -->
+<div id="p1" class="glass active"
+data-bg="https://i.pinimg.com/736x/90/a3/8d/90a38d90683b119cd446d122d184450a.jpg">
+  <h1>Hello Beautiful</h1>
+  <p>This is for you</p>
+  <button onclick="go('p2')">Open</button>
+</div>
+
+<!-- PAGE 2 -->
+<div id="p2" class="glass"
+data-bg="https://images.unsplash.com/photo-1518562180175-34a163b1a9a6">
+  <h1>Will you be my Valentine?</h1>
+  <button onclick="go('p3')">Yes</button>
+  <button onclick="go('pNo')">No</button>
+</div>
+
+<!-- PAGE 3 -->
+<div id="p3" class="glass"
+data-bg="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e">
+  <h1>Prove you love Rajola</h1>
+  <input id="proof" placeholder="Type: I love you">
+  <button onclick="check()">Continue</button>
+</div>
+
+<!-- PAGE GIFT -->
+<div id="pGift" class="glass"
+data-bg="https://images.unsplash.com/photo-1495567720989-cebdbdd97913">
+  <h2>Choose one gift 🎁</h2>
+  <div class="gifts" id="gifts"></div>
+</div>
+
+<!-- PAGE NO -->
+<div id="pNo" class="glass"
+data-bg="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
+  <h1>Sorry for disturbing you</h1>
+  <textarea id="wish" placeholder="Your wish"></textarea>
+  <textarea id="like" placeholder="One thing you like about me"></textarea>
+  <button onclick="sendNo()">Submit</button>
+</div>
+
+<script>
+/* 📞 NAMBA YAKO */
+const phone="255676195192";
+
+/* MUSIC UNMUTE */
+document.body.addEventListener("click",()=>{
+  const m=document.getElementById("music");
+  m.muted=false;
+  m.play();
+},{once:true});
+
+function go(id){
+  document.querySelectorAll('.glass').forEach(p=>p.classList.remove('active'));
+  const page=document.getElementById(id);
+  page.classList.add('active');
+
+  const bg=page.getAttribute("data-bg");
+  if(bg){
+    document.querySelector(".background").style.backgroundImage=
+    `linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url('${bg}')`;
+  }
+  hearts();
+}
+
+function check(){
+  if(proof.value.toLowerCase().includes("i love you")){
+    go("pGift");
+  }else alert("Type I love you ❤️");
+}
+
+const gifts=[
+"💍 Ring","📱 iPhone 11 Pro","🌹 Flower","📿 Necklace",
+"💵 5000 TSH","💋 Kiss","🤗 Hug","👕 T-Shirt",
+"⚽ Football","👕 Jersey","📹 Video Call","👟 Air Force",
+"🖊️ Pen","✨ One Wish","🏠 Coming to your home","❌ Null"
+];
+
+const box=document.getElementById("gifts");
+gifts.forEach(g=>{
+  let d=document.createElement("div");
+  d.className="gift";
+  d.innerHTML="🎁";
+  d.onclick=()=>sendYes(g);
+  box.appendChild(d);
+});
+
+function sendYes(gift){
+  const msg=`Hello Rajola ❤️
+
+I said YES 😍
+My Valentine gift is:
+👉 ${gift}
+
+Happy Valentine 💖`;
+
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,"_blank");
+}
+
+function sendNo(){
+  if(!wish.value||!like.value){alert("Fill all fields ❤️");return;}
+  const msg=`Hello Rajola 🙂
+
+I said NO 💔
+
+My wish:
+👉 ${wish.value}
+
+One thing I like about you:
+👉 ${like.value}`;
+
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,"_blank");
+}
+
+function hearts(){
+  for(let i=0;i<8;i++){
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="❤️";
+    h.style.left=Math.random()*100+"vw";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),4000);
+  }
+}
+</script>
+
+</body>
+</html>
